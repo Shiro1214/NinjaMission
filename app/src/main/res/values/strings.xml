@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">NinjaMission</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <string name="dark_mode">Enable Dark Mode </string>
+    <string name="count_down">Set game time</string>
+    <string name="game_sound">Enable Game SFX </string>
+    <string name="background_music">Enable Background Music </string>
+    <string name="toast_text">Let the battle begin!</string>
+    <string name="frugality">Enable Frugality </string>
+    <string name="vibrant_mode">Enable Vibrant Mode </string>
+    <string name="battleship_move">Allow Battleship moving </string>
+    <string name="sub_horizontal">Allow Submarines to move horizontally </string>
+    <string name="air_horizontal">Allow Planes to move horizontally" </string>
+    <string name="rapid_missile">Rapid fire on Missiles </string>
+    <string name="rapid_depthc">Rapid fire on DepthCharges </string>
+    <string name="num_airs">Set number of airplanes </string>
+    <string name="num_subs">Set number of submarines </string>
+    <string name="air_speed">Set airplanes speed </string>
+    <string name="sub_speed">Set submariens speed </string>
+    <string name="air_dir">Set airplanes direction</string>
+    <string name="sub_dir">Set submarines direction </string>
+    <string name="ON">ON</string>
+    <string name="OFF">OFF</string>
+    <string name="time">Time</string>
+    <string name="score">Score</string>
+    <string name="gameover">GAME OVER!</string>
+    <string name="playAgain">Play Again!</string>
+    <string name="Okay">Okay</string>
+    <string name="quit">Quit.</string>
+    <string name="endGameMsg1">What a good looking and smart one!\nCongratulations! A new high score! :</string>
+    <string name="endGameMsg2">You have done well! but there\'s always way to improve :) \nScore obtained: </string>
+    <string name="Info">Instructions</string>
+    <string name="infoTexts">-Click anywhere to shoot shurikens\n
+        - Winning Condition:\n
+        * Hit the right Ghost that has the answer for the math problem\n
+        * If 5 Ghosts go to the otherside, the game will end and you will lose\n
+        Credit: \'Surrounded by the enemy\' by Westar Music
+</string>
+
+</resources>
