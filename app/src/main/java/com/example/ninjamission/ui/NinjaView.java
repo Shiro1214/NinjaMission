@@ -111,12 +111,13 @@ public class NinjaView extends View implements TickListener {
     }
 
     private void readScore() {
-        try(Scanner s = new Scanner(getContext().openFileInput("level.txt"));) {
+/*        try(Scanner s = new Scanner(getContext().openFileInput("level.txt"));) {
             level = s.nextInt();
             //s.close();
         } catch (FileNotFoundException e) {
             level = 1;//new install
-        }
+        }*/
+        level = SettingsActivity.SettingsFragment.getLevelPref(getContext());
 
         if (level > 10 ) level = 10;
     }
@@ -174,12 +175,38 @@ public class NinjaView extends View implements TickListener {
             if (e.getAction() == MotionEvent.ACTION_DOWN) {
                 //index++;
                 if (shurikens.isEmpty()) {
+
                     var shuriken = new Shuriken(getResources(), w, h, x, y);
                     //shuriken.setPosition(0.1f * w, h * 0.8f);
                     ninjaSprite.shoot();
                     shurikens.add(shuriken);
+                    //Try using timer dx dt for shuriken
                     for (int j = 0; j< 100; j++) tim.register(shuriken);
                    // Log.d("Index ++", "Index inc5rease");
+                                        /*if (shurikens.isEmpty()) {
+    var shuriken = new Shuriken(getResources(), w, h, x, y);
+    ninjaSprite.shoot();
+    shurikens.add(shuriken);
+    float velocity = 500.0f; // pixels per second
+    float targetX = w; // end position of the shuriken
+    float deltaX = targetX - shuriken.getX();
+    float deltaT = deltaX / velocity;
+    float startTime = System.currentTimeMillis();
+    tim.register(new TimerTask() {
+        @Override
+        public void run() {
+            float elapsedTime = System.currentTimeMillis() - startTime;
+            if (elapsedTime >= deltaT) {
+                shuriken.setX(targetX);
+                tim.cancel();
+            } else {
+                float currentX = shuriken.getX() + (elapsedTime / deltaT) * deltaX;
+                shuriken.setX(currentX);
+            }
+        }
+    });
+}
+*/
                 }
             }
         }
@@ -209,10 +236,11 @@ public class NinjaView extends View implements TickListener {
 
     //Generating ghosts randomly
     private void createGhosts(){
-        var maxLevel = getHeight()/(getWidth()/20) - 1;
-        //System.out.println("maxLevel is : " + maxLevel);
-        if (level > maxLevel) level = maxLevel;
+
         if (ghosts.isEmpty() && onScreenTime != 0){
+            int maxLevel = getHeight()/(getWidth()/20) - 1;
+            //System.out.println("maxLevel is : " + maxLevel);
+            if (level > maxLevel) level = maxLevel;
             ansExist = false;
             answer   = randomMathProb();
             //System.out.println(""+a+" "+operator+" "+b+" = "+answer );
@@ -226,6 +254,9 @@ public class NinjaView extends View implements TickListener {
                 ghosts.add(ghost);
             }
         } else if (!ghosts.get(ghosts.size()-1).getAnswer().equals(answer)) {
+            int maxLevel = getHeight()/(getWidth()/20) -1 ;
+            //System.out.println("maxLevel is : " + maxLevel);
+            if (level > maxLevel) level = maxLevel;
             ghosts.clear();
             if (onScreenTime != 0){
                 ansExist = false;

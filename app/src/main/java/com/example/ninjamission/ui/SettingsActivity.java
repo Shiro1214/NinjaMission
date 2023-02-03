@@ -14,6 +14,9 @@ import androidx.preference.SwitchPreference;
 
 import com.example.ninjamission.R;
 
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 public class SettingsActivity extends AppCompatActivity {
     private static final String SOUND_FX = "SOUND_FX";
     private static final String MATH_LEVEL = "MATH_LEVEL";
@@ -24,7 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
     private static final String FRUGALITY_MODE = "FRUGALITY_MODE";
     private static final String BATTLESHIP_MOVE = "BATTLESHIP_MOVE";
     private static final String NUM_PLANES = "NUM_PLANES";
-    private static final String NUM_SUBS = "NUM_SUBS";
+    private static final String LEVEL = "LEVEL";
     private static final String AVERAGE_PLANE_SPEED = "AVERAGE_PLANE_SPEED";
     private static final String AVERAGE_SUB_SPEED = "AVERAGE_SUB_SPEED";
     private static final String PLANE_DIRECTION = "PLANE_DIRECTION";
@@ -51,10 +54,24 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
+        static int level;
+        private void getLevel() {
+            try(Scanner s = new Scanner(getContext().openFileInput("level.txt"));) {
+                level = s.nextInt();
+                //s.close();
+            } catch (FileNotFoundException e) {
+                level = 1;//new install
+            }
+
+            if (level > 10 ) level = 10;
+        }
         @Override
         public void onCreatePreferences(Bundle b, String s) {
             context = getPreferenceManager().getContext();
             PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(context);
+            getLevel();
+
+
 
             //TODO add preference widgets here
 
@@ -74,12 +91,22 @@ public class SettingsActivity extends AppCompatActivity {
             timer.setTitle("Set Game Duration");
             timer.setEntryValues(timerValues);
 
-
+            String[] levels = new String[level];
+            for (int i = 1; i <= level; i++) {
+                levels[i-1] = i+"";
+            }
+            var levelPrefs = new ListPreference(context);
+            levelPrefs.setTitle("Select level");
+            levelPrefs.setEntryValues(levels);
+            levelPrefs.setEntries(levels);
+            levelPrefs.setDefaultValue(""+level);
+            levelPrefs.setKey(LEVEL);
 
 
             setPreferenceScreen(screen);
             screen.addPreference(difficulty);
             screen.addPreference(mathLevel);
+            screen.addPreference(levelPrefs);
         }
 
         //Difficulty
@@ -87,6 +114,19 @@ public class SettingsActivity extends AppCompatActivity {
             var tmp = PreferenceManager.getDefaultSharedPreferences(c).getString(DIFFICULTY_MODE,"0.01f");
             return Float.parseFloat(tmp);
         }
+
+        public static int getLevelPref(Context c){
+            var tmp = PreferenceManager.getDefaultSharedPreferences(c).getString(LEVEL,""+level);
+            return Integer.parseInt(tmp);
+        }
+
+        public static int  mathLevel(Context c){
+            var tmp = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(c).getString(MATH_LEVEL,"10"));
+            return tmp;
+        }
+
+
+
 
         private String getExtStr(int id){
             return getResources().getString(id);
@@ -124,9 +164,6 @@ public class SettingsActivity extends AppCompatActivity {
         public static String  numPlanesSet(Context c){
             return PreferenceManager.getDefaultSharedPreferences(c).getString(NUM_PLANES,"3");
         }
-        public static int  mathLevel(Context c){
-            var tmp = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(c).getString(MATH_LEVEL,"10"));
-            return tmp;
-        }
+
     }
 }
