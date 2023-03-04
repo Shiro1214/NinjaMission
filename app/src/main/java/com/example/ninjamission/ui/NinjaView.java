@@ -183,7 +183,10 @@ public class NinjaView extends View implements TickListener {
                     //Try using timer dx dt for shuriken
                     for (int j = 0; j< 100; j++) tim.register(shuriken);
                    // Log.d("Index ++", "Index inc5rease");
-                                        /*if (shurikens.isEmpty()) {
+
+
+
+                    /*if (shurikens.isEmpty()) {
     var shuriken = new Shuriken(getResources(), w, h, x, y);
     ninjaSprite.shoot();
     shurikens.add(shuriken);
@@ -236,11 +239,11 @@ public class NinjaView extends View implements TickListener {
 
     //Generating ghosts randomly
     private void createGhosts(){
-
+        int maxLevel = getHeight()/(getWidth()/20) - 1;
+        //System.out.println("maxLevel is : " + maxLevel);
+        if (level > maxLevel) level = maxLevel;
+        else if (level < 1 ) level = 1;
         if (ghosts.isEmpty() && onScreenTime != 0){
-            int maxLevel = getHeight()/(getWidth()/20) - 1;
-            //System.out.println("maxLevel is : " + maxLevel);
-            if (level > maxLevel) level = maxLevel;
             ansExist = false;
             answer   = randomMathProb();
             //System.out.println(""+a+" "+operator+" "+b+" = "+answer );
@@ -254,9 +257,10 @@ public class NinjaView extends View implements TickListener {
                 ghosts.add(ghost);
             }
         } else if (!ghosts.get(ghosts.size()-1).getAnswer().equals(answer)) {
-            int maxLevel = getHeight()/(getWidth()/20) -1 ;
+/*            int maxLevel = getHeight()/(getWidth()/20) -1 ;
             //System.out.println("maxLevel is : " + maxLevel);
-            if (level > maxLevel) level = maxLevel;
+            if (level > maxLevel) level = maxLevel;*/
+            ghosts.stream().forEach(g -> g.gone());
             ghosts.clear();
             if (onScreenTime != 0){
                 ansExist = false;

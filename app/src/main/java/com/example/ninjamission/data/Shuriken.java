@@ -4,8 +4,13 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.os.Handler;
+import android.os.Message;
+
+import androidx.annotation.NonNull;
 
 import com.example.ninjamission.R;
+import com.example.ninjamission.miscellenous.TickListener;
 
 public class Shuriken extends Sprite{
     private int index = 0;
@@ -64,12 +69,36 @@ public class Shuriken extends Sprite{
     }
     @Override
     public void move(){
+
 /*
         System.out.println("slope : " + slope);
         System.out.println("x is " + x);
         System.out.println("y is "+ y);
 */
-
+  /*if (shurikens.isEmpty()) {
+    var shuriken = new Shuriken(getResources(), w, h, x, y);
+    ninjaSprite.shoot();
+    shurikens.add(shuriken);
+    float velocity = 500.0f; // pixels per second
+    float targetX = w; // end position of the shuriken
+    float deltaX = targetX - shuriken.getX();
+    float deltaT = deltaX / velocity;
+    float startTime = System.currentTimeMillis();
+    tim.register(new TimerTask() {
+        @Override
+        public void run() {
+            float elapsedTime = System.currentTimeMillis() - startTime;
+            if (elapsedTime >= deltaT) {
+                shuriken.setX(targetX);
+                tim.cancel();
+            } else {
+                float currentX = shuriken.getX() + (elapsedTime / deltaT) * deltaX;
+                shuriken.setX(currentX);
+            }
+        }
+    });
+}
+*/
         bound.offset(x,y);
     }
 }

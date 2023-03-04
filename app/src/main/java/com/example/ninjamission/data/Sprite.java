@@ -63,6 +63,7 @@ public abstract class Sprite implements TickListener {
         return ((bound.top < 0 || bound.bottom > screenH) || (bound.right > screenW));
     }
 
+
     @Override
     public void tick() {
         move();

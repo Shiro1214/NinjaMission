@@ -28,7 +28,6 @@ public class Ghost extends Sprite{
     private Context c;
     private float presetSpeed;
     private double timeNow,timeBefore,timeLeft;
-    public static ArrayList<RectF> GENERATED_POS = new ArrayList<>();
     public static ArrayList<Float> POSITIONS;
     private static int POS_INDEX = 0;
 
@@ -184,7 +183,7 @@ public class Ghost extends Sprite{
         timeLeft = timeNow - timeBefore;
         var bonus = timeLeft/1000;
 
-        var point = bonus <= 0.25 ? 100+bonus*100 : 100;
+        var point = timeLeft <= 10000 ? 150 : 100;
         //System.out.println("Bonus "+ bonus);
         return (int) point;
     }
