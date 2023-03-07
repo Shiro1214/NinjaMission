@@ -99,6 +99,9 @@ public class Shuriken extends Sprite{
     });
 }
 */
-        bound.offset(x,y);
+        bound.offset(x, y);
+/*        for (int i= 0; i< 100 ; i++ ) {
+
+        }*/
     }
 }

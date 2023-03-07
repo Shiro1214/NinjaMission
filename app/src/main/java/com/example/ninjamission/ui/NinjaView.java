@@ -3,6 +3,7 @@ package com.example.ninjamission.ui;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -181,7 +182,8 @@ public class NinjaView extends View implements TickListener {
                     ninjaSprite.shoot();
                     shurikens.add(shuriken);
                     //Try using timer dx dt for shuriken
-                    for (int j = 0; j< 100; j++) tim.register(shuriken);
+                    //for (int j = 0; j< 100; j++)
+                    tim.register(shuriken);
                    // Log.d("Index ++", "Index inc5rease");
 
 
@@ -332,7 +334,14 @@ public class NinjaView extends View implements TickListener {
         ab.setCancelable(false)
                 .setTitle("Going to level " + (level-1))
                 .setPositiveButton("Continue",(d,i)-> playAgain())
-                .setNegativeButton("Stop",(d,i)->((Activity)getContext()).finish());
+                .setNegativeButton("Stay", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        level--;
+                        playAgain();
+                    }
+                });
+                //.setNegativeButton("Stop",(d,i)->((Activity)getContext()).finish());
         var ad = ab.create();
         ad.show();
     }

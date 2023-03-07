@@ -37,7 +37,15 @@ public class UpdateTimer extends Handler implements Predicate<TickListener> {
         }
 
         //updates
-        subscribes.forEach(TickListener::tick);
+        //subscribes.forEach(TickListener::tick);
+        for (var ticker : subscribes ) {
+            if (ticker instanceof Shuriken) {
+                var s = (Shuriken)ticker;
+                for (int i = 0 ; i < 100; i++) {
+                    s.tick();
+                }
+            } else ticker.tick();
+        }
         System.out.println("Size of Listeners is :" + subscribes.size());
         //Log.d("SIZE Listneres", "handleMessage: There are "+subscribes.size());
     }
