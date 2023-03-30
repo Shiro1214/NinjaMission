@@ -102,11 +102,13 @@ public class SettingsActivity extends AppCompatActivity {
             levelPrefs.setDefaultValue(""+level);
             levelPrefs.setKey(LEVEL);
 
+            CheckBoxPreference bgMusic = setUpBoxPrefs("Background Music",BACKGROUND_MUSIC);
 
             setPreferenceScreen(screen);
             screen.addPreference(difficulty);
             screen.addPreference(mathLevel);
             screen.addPreference(levelPrefs);
+            screen.addPreference(bgMusic);
         }
 
         //Difficulty
@@ -124,7 +126,9 @@ public class SettingsActivity extends AppCompatActivity {
             var tmp = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(c).getString(MATH_LEVEL,"10"));
             return tmp;
         }
-
+        public static boolean getBgMusicPrefs(Context c){
+            return PreferenceManager.getDefaultSharedPreferences(c).getBoolean(BACKGROUND_MUSIC,true);
+        }
 
 
 

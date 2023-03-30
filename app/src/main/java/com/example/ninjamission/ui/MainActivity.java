@@ -9,7 +9,8 @@ import com.example.ninjamission.R;
 
 public class MainActivity extends Activity {
     private MediaPlayer bg = new MediaPlayer();
-
+    boolean musicOn = false;
+    NinjaView nj;
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -27,10 +28,40 @@ public class MainActivity extends Activity {
         bg = MediaPlayer.create(this, R.raw.ninja_background);
         bg.setLooping(true);
 
-        bg.start();
+        if (SettingsActivity.SettingsFragment.getBgMusicPrefs(this)) {
+            bg.start();
+            musicOn = true;
+        }
 
-
-        var nj = new NinjaView(this);
+        nj = new NinjaView(this);
         setContentView(nj);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            nj.resumeTimer();
+        }catch (NullPointerException e){}
+        if(musicOn){
+            try{
+                bg.start();}
+            catch (IllegalStateException e){}
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            nj.pauseTimer();
+        } catch (NullPointerException e) {
+        }
+        if (musicOn) {
+            try {
+                bg.pause();
+            } catch (IllegalStateException e) {
+            }
+        }
     }
 }

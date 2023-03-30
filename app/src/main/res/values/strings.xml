@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">NinjaMission</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">Settings</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
@@ -50,7 +50,8 @@
         - Winning Condition:\n
         * Hit the right Ghost that has the answer for the math problem\n
         * If 5 Ghosts go to the otherside, the game will end and you will lose\n
-        Credit: \'Surrounded by the enemy\' by Westar Music
+        Credit: \'Reggaeton Pop - Night Walk\' by AntipodeanWriter
+
 </string>
 
 </resources>

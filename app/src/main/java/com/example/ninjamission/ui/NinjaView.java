@@ -250,7 +250,7 @@ public class NinjaView extends View implements TickListener {
             answer   = randomMathProb();
             //System.out.println(""+a+" "+operator+" "+b+" = "+answer );
             Ghost ghost = null;
-            for (int i =0 ; i<=level ; i++) { //* changed
+            for (int i =0 ; i<=level ; i++) {
                 if (i!= level)
                     ghost = new Ghost(getResources(), w, h,randomMathProb(),getContext());
                 else  ghost = new Ghost(getResources(), w, h,answer,getContext());
@@ -394,5 +394,14 @@ public class NinjaView extends View implements TickListener {
 
         return c;
 
+    }
+
+    public void releaseFXs() {
+    }
+
+    public void resumeTimer() {
+    }
+
+    public void pauseTimer() {
     }
 }
