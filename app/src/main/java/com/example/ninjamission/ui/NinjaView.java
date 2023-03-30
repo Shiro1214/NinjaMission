@@ -42,7 +42,7 @@ public class NinjaView extends View implements TickListener {
     private ArrayList<String> operators;
     private int inCount, onScreenTime,timeCount, wrongShoot;
     static int level = 1;
-    private int timer ,a,b, score = 0;
+    private int a,b, score = 0;
     private boolean ansExist = false;
 
     private Number answer = 0;
@@ -129,8 +129,6 @@ public class NinjaView extends View implements TickListener {
         if (!initialized) {
            playAgain();
 
-
-
             //OnScreenTimer Paint
             timerPaint = new Paint();
             timerPaint.setColor(Color.RED);
@@ -185,33 +183,6 @@ public class NinjaView extends View implements TickListener {
                     //for (int j = 0; j< 100; j++)
                     tim.register(shuriken);
                    // Log.d("Index ++", "Index inc5rease");
-
-
-
-                    /*if (shurikens.isEmpty()) {
-    var shuriken = new Shuriken(getResources(), w, h, x, y);
-    ninjaSprite.shoot();
-    shurikens.add(shuriken);
-    float velocity = 500.0f; // pixels per second
-    float targetX = w; // end position of the shuriken
-    float deltaX = targetX - shuriken.getX();
-    float deltaT = deltaX / velocity;
-    float startTime = System.currentTimeMillis();
-    tim.register(new TimerTask() {
-        @Override
-        public void run() {
-            float elapsedTime = System.currentTimeMillis() - startTime;
-            if (elapsedTime >= deltaT) {
-                shuriken.setX(targetX);
-                tim.cancel();
-            } else {
-                float currentX = shuriken.getX() + (elapsedTime / deltaT) * deltaX;
-                shuriken.setX(currentX);
-            }
-        }
-    });
-}
-*/
                 }
             }
         }
@@ -397,6 +368,7 @@ public class NinjaView extends View implements TickListener {
     }
 
     public void releaseFXs() {
+        right_answer_fx.release();
     }
 
     public void resumeTimer() {

@@ -28,7 +28,7 @@
 
             android:name=".ui.SplashScreen"
             android:exported="true"
-            android:label="SplashWelcome"
+            android:label="@string/title_welcome_activity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             >

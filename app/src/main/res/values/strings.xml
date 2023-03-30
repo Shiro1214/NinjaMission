@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">NinjaMission</string>
     <string name="title_activity_settings">Settings</string>
-
+    <string name="title_welcome_activity">NinjaMission</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>

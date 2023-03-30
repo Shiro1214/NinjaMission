@@ -35,8 +35,10 @@ public class SplashScreen extends Activity {
         //Music
         bgMusic = MediaPlayer.create(this,R.raw.ninja_background);
         bgMusic.setLooping(true);
+        if (SettingsActivity.SettingsFragment.getBgMusicPrefs(this)) {
+            bgMusic.start();
+        }
 
-        bgMusic.start();
 
         setContentView(bg);
     }
