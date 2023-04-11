@@ -31,7 +31,7 @@ public abstract class Sprite implements TickListener {
         //pos = new PointF();
         bound = new RectF();
         frames = new ArrayList<>();
-        loadAndScale();
+
     }
 
     public void draw(Canvas c){

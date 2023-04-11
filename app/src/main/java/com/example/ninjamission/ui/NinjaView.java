@@ -226,7 +226,7 @@ public class NinjaView extends View implements TickListener {
                     ghost = new Ghost(getResources(), w, h,randomMathProb(),getContext());
                 else  ghost = new Ghost(getResources(), w, h,answer,getContext());
                 // ghost.setPosition((float) Math.random() * (w * 0.5f - ghost.bound.width()) + (w * 0.5f), (float) Math.random() * (h * 0.5f) + h * 0.25f);
-                tim.register(ghost);
+                //tim.register(ghost);
                 ghosts.add(ghost);
             }
         } else if (!ghosts.get(ghosts.size()-1).getAnswer().equals(answer)) {
@@ -245,7 +245,7 @@ public class NinjaView extends View implements TickListener {
                         ghost = new Ghost(getResources(), w, h, randomMathProb(), getContext());
                     else ghost = new Ghost(getResources(), w, h, answer, getContext());
                     // ghost.setPosition((float) Math.random() * (w * 0.5f - ghost.bound.width()) + (w * 0.5f), (float) Math.random() * (h * 0.5f) + h * 0.25f);
-                    tim.register(ghost);
+                    //tim.register(ghost);
                     ghosts.add(ghost);
                 }
             }
@@ -269,7 +269,7 @@ public class NinjaView extends View implements TickListener {
     }
 
     private void playAgain(){
-        onScreenTime = 20;
+        onScreenTime = 180;
 
         shurikens = new ArrayList<>();
         ghosts = new ArrayList<>();
@@ -303,7 +303,7 @@ public class NinjaView extends View implements TickListener {
 
         AlertDialog.Builder ab = new AlertDialog.Builder(getContext());
         ab.setCancelable(false)
-                .setTitle("Going to level " + (level-1))
+                .setTitle("Going to level " + (level))
                 .setPositiveButton("Continue",(d,i)-> playAgain())
                 .setNegativeButton("Stay", new DialogInterface.OnClickListener() {
                     @Override

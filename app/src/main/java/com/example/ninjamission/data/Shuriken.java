@@ -17,6 +17,7 @@ public class Shuriken extends Sprite{
     private float slope,x,y;
     public Shuriken(Resources res, float w,float h,float x2, float y2) {
         super(res, w,h);
+        loadAndScale();
         var x1 = 0.1f*w;
         var y1 = h*0.8f;
         slope = (y2-y1)/(x2-x1);

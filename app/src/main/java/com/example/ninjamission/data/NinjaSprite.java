@@ -17,6 +17,7 @@ public class NinjaSprite extends Sprite{
     private int count = 0;
     public NinjaSprite(Resources res,float w,float h){
         super(res,w,h);
+        loadAndScale();
         img = frames.get(index);
     }
 

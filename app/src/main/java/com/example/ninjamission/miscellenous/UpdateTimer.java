@@ -5,6 +5,7 @@ import android.os.Message;
 
 import androidx.annotation.NonNull;
 
+import com.example.ninjamission.data.Background;
 import com.example.ninjamission.data.Ghost;
 import com.example.ninjamission.data.Shuriken;
 
@@ -44,7 +45,14 @@ public class UpdateTimer extends Handler implements Predicate<TickListener> {
                 for (int i = 0 ; i < 100; i++) {
                     s.tick();
                 }
-            } else ticker.tick();
+            } /*else if (ticker instanceof Background) {
+                var b = (Background)ticker;
+                for (int i = 0 ; i < 5; i++) {
+                    b.tick();
+                }
+            }*/
+
+            else ticker.tick();
         }
         System.out.println("Size of Listeners is :" + subscribes.size());
         //Log.d("SIZE Listneres", "handleMessage: There are "+subscribes.size());

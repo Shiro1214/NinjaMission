@@ -34,6 +34,7 @@ public class Ghost extends Sprite{
     private float xPos,yPos;
     public Ghost(Resources res, float w,float h, Number ans,Context c) {
         super(res, w,h);
+        loadAndScale();
         img = frames.get(index);
         answer = ans;
         ghostPaint = new Paint(Paint.LINEAR_TEXT_FLAG);
