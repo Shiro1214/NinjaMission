@@ -15,7 +15,6 @@ import java.util.ArrayList;
 public abstract class Sprite implements TickListener {
     protected Bitmap img;
     protected RectF bound;
-    protected PointF pos;
     protected float screenW,screenH;
     protected ArrayList<Bitmap> frames;
     protected Resources res;

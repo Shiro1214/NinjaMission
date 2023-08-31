@@ -26,7 +26,8 @@ public class Background extends Sprite {
     private RectF bound1;
     private ArrayList<RectF> bounds;
     static final  int NUM_FRAME =  9;
-    public Background(Resources res, float w,float h) {
+    private static  Background singleton;
+    private Background(Resources res, float w,float h) {
         super(res,w,h);
         bounds = new ArrayList<>();
         for (int i = 0 ; i < NUM_FRAME; i++){
@@ -35,6 +36,13 @@ public class Background extends Sprite {
         loadAndScale();
         //loadAndScale();
     }
+    public static Background getSingleton(Resources res, float w,float h){
+        if (singleton==null){
+            singleton = new Background(res,w,h);
+        }
+        return singleton;
+    }
+
     public void draw(Canvas c) {
         //img = frames.get(index);
         /*c.drawBitmap(frame1,bound.left,bound.top,null);

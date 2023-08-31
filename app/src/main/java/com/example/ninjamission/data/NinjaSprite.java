@@ -13,6 +13,7 @@ public class NinjaSprite extends Sprite{
     private Bitmap frame1;
     private Bitmap frame2;
     private Boolean shooting =false;
+    private int frame_count = 0;
 
     private int count = 0;
     public NinjaSprite(Resources res,float w,float h){
@@ -42,8 +43,11 @@ public class NinjaSprite extends Sprite{
     public void draw(Canvas c){
         img = frames.get(index);
         super.draw(c);
-        index = (index +1) % 2;
-
+        frame_count++;
+        if (frame_count>= 2) {
+            index = (index + 1) % 2;
+            frame_count = 0;
+        }
         if (shooting) {
             count++;
             if (count>=2) {

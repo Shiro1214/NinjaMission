@@ -15,6 +15,7 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         bg.release();
+        nj.releaseFXs();
     }
 
     @Override

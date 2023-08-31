@@ -35,7 +35,7 @@ public class SettingsActivity extends AppCompatActivity {
     private static final String DARK_MODE = "DARK_MODE";
     private static final String VIBRANT_MODE = "VIBRANT_MODE";
     private static final String BACKGROUND_MUSIC = "BACKGROUND_MUSIC";
-    private static final String COUNT_DOWN = "COUNT_DOWN";
+    private static final String GAME_DURATION = "GAME_DURATION";
     private static Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +65,8 @@ public class SettingsActivity extends AppCompatActivity {
 
             if (level > 10 ) level = 10;
         }
+
+
         @Override
         public void onCreatePreferences(Bundle b, String s) {
             context = getPreferenceManager().getContext();
@@ -90,6 +92,10 @@ public class SettingsActivity extends AppCompatActivity {
             var timer = new ListPreference(context);
             timer.setTitle("Set Game Duration");
             timer.setEntryValues(timerValues);
+            timer.setEntries(timerValues);
+            timer.setDefaultValue("180");
+            timer.setKey(GAME_DURATION);
+
 
             String[] levels = new String[level];
             for (int i = 1; i <= level; i++) {
@@ -109,6 +115,7 @@ public class SettingsActivity extends AppCompatActivity {
             screen.addPreference(mathLevel);
             screen.addPreference(levelPrefs);
             screen.addPreference(bgMusic);
+            screen.addPreference(timer);
         }
 
         //Difficulty
@@ -124,6 +131,10 @@ public class SettingsActivity extends AppCompatActivity {
 
         public static int  mathLevel(Context c){
             var tmp = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(c).getString(MATH_LEVEL,"10"));
+            return tmp;
+        }
+        public static int  getGameDuration(Context c){
+            var tmp = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(c).getString(GAME_DURATION,"180"));
             return tmp;
         }
         public static boolean getBgMusicPrefs(Context c){

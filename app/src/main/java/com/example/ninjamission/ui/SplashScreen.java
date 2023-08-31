@@ -118,4 +118,15 @@ public class SplashScreen extends Activity {
         super.onDestroy();
         bgMusic.release();
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bgMusic.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        bgMusic.pause();
+    }
 }

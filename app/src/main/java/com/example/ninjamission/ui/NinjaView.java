@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -48,6 +49,8 @@ public class NinjaView extends View implements TickListener {
     private Number answer = 0;
     private String operator = "*";
     private MediaPlayer right_answer_fx;
+    private MediaPlayer wrong_answer_fx;
+    private MediaPlayer attack_fx;
 
     @Override
     public void tick() {
@@ -72,7 +75,7 @@ public class NinjaView extends View implements TickListener {
 
         //timer
         timeCount++;
-        if (timeCount>=10) {
+        if (timeCount>=1000/50) {
             onScreenTime--;
             timeCount = 0;
         }
@@ -93,7 +96,14 @@ public class NinjaView extends View implements TickListener {
         super(context);
         readScore();
         right_answer_fx = new MediaPlayer();
+        wrong_answer_fx = new MediaPlayer();
+        attack_fx = new MediaPlayer();
+
+
         right_answer_fx = MediaPlayer.create(getContext(), R.raw.right_answer);
+        wrong_answer_fx = MediaPlayer.create(getContext(),R.raw.incorrect);
+        attack_fx = MediaPlayer.create(getContext(),R.raw.attack);
+
         operators = new ArrayList<>(Arrays.asList("+","-","*","/"));
         initialized = false;
 
@@ -112,14 +122,7 @@ public class NinjaView extends View implements TickListener {
     }
 
     private void readScore() {
-/*        try(Scanner s = new Scanner(getContext().openFileInput("level.txt"));) {
-            level = s.nextInt();
-            //s.close();
-        } catch (FileNotFoundException e) {
-            level = 1;//new install
-        }*/
         level = SettingsActivity.SettingsFragment.getLevelPref(getContext());
-
         if (level > 10 ) level = 10;
     }
 
@@ -141,13 +144,15 @@ public class NinjaView extends View implements TickListener {
         }
 
         background.draw(c);
-
+        timerPaint.setColor(Color.MAGENTA);
+        //c.drawLine((float) (0.175*w), 0.25f*h, (float) (0.175*w), h*0.75f, timerPaint);
         //Timer
         var minute = onScreenTime / 60;
         var seconds = Math.floorMod(onScreenTime, 60);
-        timerPaint.setColor(Color.RED);
+        timerPaint.setColor(Color.GREEN);
         c.drawText(/*getResources().getString(R.string.time)+*/"Time: " + minute + ":" + String.format("%02d", seconds), w * 0.05f, h * 0.1f, timerPaint);
-
+        timerPaint.setColor(Color.RED);
+        c.drawText("Passed: " + inCount , w * 0.05f, h * 0.17f, timerPaint);
         //Math
         timerPaint.setColor(Color.BLUE);
         c.drawText(/*getResources().getString(R.string.time)+*/"Problem: " + a + operator + b + " = ?", w * 0.4f, h * 0.1f, timerPaint);
@@ -155,6 +160,8 @@ public class NinjaView extends View implements TickListener {
         //Score
         timerPaint.setColor(Color.YELLOW);
         c.drawText("SCORE: " +score, w * 0.8f, h * 0.1f, timerPaint);
+        timerPaint.setColor(Color.RED);
+        c.drawText("Wrong: " +wrongShoot, w * 0.8f, h * 0.17f, timerPaint);
 
         ninjaSprite.draw(c);
         shurikens.forEach(s -> s.draw(c));
@@ -177,10 +184,9 @@ public class NinjaView extends View implements TickListener {
 
                     var shuriken = new Shuriken(getResources(), w, h, x, y);
                     //shuriken.setPosition(0.1f * w, h * 0.8f);
+                    attack_fx.start();
                     ninjaSprite.shoot();
                     shurikens.add(shuriken);
-                    //Try using timer dx dt for shuriken
-                    //for (int j = 0; j< 100; j++)
                     tim.register(shuriken);
                    // Log.d("Index ++", "Index inc5rease");
                 }
@@ -202,7 +208,12 @@ public class NinjaView extends View implements TickListener {
                         }
                         //right_answer_fx.release();
                     }
-                    else score -= g.getPoint()*0.25;
+                    else {
+                        wrong_answer_fx.start();
+                        score -= g.getPoint()*0.25;
+                        wrongShoot++;
+                    }
+
                     g.gone();
                     s.gone();
                 }
@@ -214,38 +225,47 @@ public class NinjaView extends View implements TickListener {
     private void createGhosts(){
         int maxLevel = getHeight()/(getWidth()/20) - 1;
         //System.out.println("maxLevel is : " + maxLevel);
+        Ghost ghost;
+        Number randomAnswer;
+
         if (level > maxLevel) level = maxLevel;
         else if (level < 1 ) level = 1;
         if (ghosts.isEmpty() && onScreenTime != 0){
             ansExist = false;
             answer   = randomMathProb();
             //System.out.println(""+a+" "+operator+" "+b+" = "+answer );
-            Ghost ghost = null;
+
             for (int i =0 ; i<=level ; i++) {
-                if (i!= level)
-                    ghost = new Ghost(getResources(), w, h,randomMathProb(),getContext());
+                if (i!= level) {
+                    randomAnswer = randomMathProb();
+                    while (randomAnswer==answer) {
+                        randomAnswer = randomMathProb();
+                    }
+                    ghost = new Ghost(getResources(), w, h, randomAnswer, getContext());
+                }
                 else  ghost = new Ghost(getResources(), w, h,answer,getContext());
                 // ghost.setPosition((float) Math.random() * (w * 0.5f - ghost.bound.width()) + (w * 0.5f), (float) Math.random() * (h * 0.5f) + h * 0.25f);
-                //tim.register(ghost);
+                tim.register(ghost);
                 ghosts.add(ghost);
             }
         } else if (!ghosts.get(ghosts.size()-1).getAnswer().equals(answer)) {
-/*            int maxLevel = getHeight()/(getWidth()/20) -1 ;
-            //System.out.println("maxLevel is : " + maxLevel);
-            if (level > maxLevel) level = maxLevel;*/
             ghosts.stream().forEach(g -> g.gone());
             ghosts.clear();
             if (onScreenTime != 0){
                 ansExist = false;
                 answer   = randomMathProb();
                 //System.out.println(""+a+" "+operator+" "+b+" = "+answer );
-                Ghost ghost = null;
                 for (int i = 0; i <= level; i++) {
-                    if (i != level)
-                        ghost = new Ghost(getResources(), w, h, randomMathProb(), getContext());
+                    if (i != level) {
+                        randomAnswer = randomMathProb();
+                        while (randomAnswer==answer) {
+                            randomAnswer = randomMathProb();
+                        }
+                        ghost = new Ghost(getResources(), w, h, randomAnswer, getContext());
+                    }
                     else ghost = new Ghost(getResources(), w, h, answer, getContext());
                     // ghost.setPosition((float) Math.random() * (w * 0.5f - ghost.bound.width()) + (w * 0.5f), (float) Math.random() * (h * 0.5f) + h * 0.25f);
-                    //tim.register(ghost);
+                    tim.register(ghost);
                     ghosts.add(ghost);
                 }
             }
@@ -260,7 +280,7 @@ public class NinjaView extends View implements TickListener {
             AlertDialog.Builder ab = new AlertDialog.Builder(getContext());
             ab.setCancelable(false)
                     .setTitle("YOU LOST :(!")
-                    .setPositiveButton("Play Again",(d,i)-> playAgain())
+                    .setPositiveButton("Continue",(d,i)-> playAgain())
                     .setNegativeButton("Stop",(d,i)->((Activity)getContext()).finish());
             tim.removeMessages(0);
             var ad = ab.create();
@@ -269,7 +289,8 @@ public class NinjaView extends View implements TickListener {
     }
 
     private void playAgain(){
-        onScreenTime = 180;
+        score = 0;
+        onScreenTime = SettingsActivity.SettingsFragment.getGameDuration(getContext());
 
         shurikens = new ArrayList<>();
         ghosts = new ArrayList<>();
@@ -281,7 +302,7 @@ public class NinjaView extends View implements TickListener {
 
         ninjaSprite = new NinjaSprite(getResources(),w,h);
         ninjaSprite.setPosition(w*0.05f, h*0.7f);
-        background = new Background(getResources(),w,h);
+        background = Background.getSingleton(getResources(),w,h);/*new Background(getResources(),w,h);*/
 
         tim = new UpdateTimer();
 
@@ -293,6 +314,7 @@ public class NinjaView extends View implements TickListener {
     private void nextLevelAccomplished(){
         tim.removeMessages(0);
         level++;
+
 
         try(var fos = getContext().openFileOutput("level.txt",Context.MODE_PRIVATE)) {
             fos.write((""+level + " ").getBytes());
@@ -311,7 +333,7 @@ public class NinjaView extends View implements TickListener {
                         level--;
                         playAgain();
                     }
-                });
+                }).setCancelable(false);
                 //.setNegativeButton("Stop",(d,i)->((Activity)getContext()).finish());
         var ad = ab.create();
         ad.show();
@@ -368,12 +390,17 @@ public class NinjaView extends View implements TickListener {
     }
 
     public void releaseFXs() {
+        if (right_answer_fx!=null)
         right_answer_fx.release();
     }
 
     public void resumeTimer() {
+        if (tim!=null)
+        tim.resume();
     }
 
     public void pauseTimer() {
+        if (tim!=null)
+        tim.pause();
     }
 }

@@ -19,14 +19,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Formatter;
 
-import kotlin.sequences.FlatteningSequence;
 
 public class Ghost extends Sprite{
     private int index = 0;
     private Number answer;
-    private Paint ghostPaint;
+    private final Paint ghostPaint;
     private Context c;
-    private float presetSpeed;
+    private final float presetSpeed;
     private double timeNow,timeBefore,timeLeft;
     public static ArrayList<Float> POSITIONS;
     private static int POS_INDEX = 0;
@@ -78,7 +77,7 @@ public class Ghost extends Sprite{
             for (int i=0; i< maxLevel; i++){
                 //TO FIX- Make sure there's exactly maxlevel -1 ghosts, and there are gaps bettween each ghost
 
-                POSITIONS.add(((float)i/(float)maxLevel) + gap );
+                POSITIONS.add(((float)i/maxLevel) + gap );
 
                 gap += increment;
 
@@ -92,28 +91,7 @@ public class Ghost extends Sprite{
         xPos = screenW-scaleW;
         yPos = POSITIONS.get(POS_INDEX)*screenH /*+ (POS_INDEX * screenH*0.05f)*/;
         POS_INDEX = (POS_INDEX +1) % POSITIONS.size();
-
         setPosition(xPos,yPos);
-
-
-
-/*        //recursiveYPos();
-        A:
-        while (true) {
-            for (var rectf : GENERATED_POS) {
-                if (RectF.intersects(rectf, bound)) {
-                    while (RectF.intersects(rectf, bound)) {
-                        bound.offsetTo(xPos, (float) Math.random() * (screenH * 0.5f) + screenH * 0.25f);
-                    }
-                    continue A;
-                }
-            }
-            break;
-        }
-//TO DO - Divide into sections and generate positions
-
-        GENERATED_POS.add(bound);*/
-
     }
 
     @Override
@@ -186,7 +164,7 @@ public class Ghost extends Sprite{
 
         var point = timeLeft <= 10000 ? 150 : 100;
         //System.out.println("Bonus "+ bonus);
-        return (int) point;
+        return point;
     }
 
 
