@@ -5,7 +5,6 @@ import android.os.Message;
 
 import androidx.annotation.NonNull;
 
-import com.example.ninjamission.data.Background;
 import com.example.ninjamission.data.Ghost;
 import com.example.ninjamission.data.Shuriken;
 

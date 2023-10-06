@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.RectF;
 
 import com.example.ninjamission.R;
-import com.example.ninjamission.data.Sprite;
 
 import java.util.ArrayList;
 
@@ -23,7 +22,6 @@ public class Background extends Sprite {
     private Bitmap frame7;
     private Bitmap frame8;
     private Bitmap frame9;
-    private RectF bound1;
     private ArrayList<RectF> bounds;
     static final  int NUM_FRAME =  9;
     private static  Background singleton;
@@ -41,6 +39,12 @@ public class Background extends Sprite {
             singleton = new Background(res,w,h);
         }
         return singleton;
+    }
+    public void reset(){
+        var scaleW = (int)screenW*relativeWidth();
+        for (int i = 0; i<9 ; i++){
+            bounds.get(i).set(i*screenW,0,scaleW,scaleW);
+        }
     }
 
     public void draw(Canvas c) {
@@ -89,9 +93,9 @@ public class Background extends Sprite {
         bound.set(0,0,scaleW,scaleW);
         bound1.set(screenW,0,scaleW,scaleW);*/
 
-        for (int i = 0; i<9 ; i++){
+/*        for (int i = 0; i<9 ; i++){
             bounds.get(i).set(i*screenW,0,scaleW,scaleW);
-        }
+        }*/
 
         frames.add(frame1);
         frames.add(frame2);

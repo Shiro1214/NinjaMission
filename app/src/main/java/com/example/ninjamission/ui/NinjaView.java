@@ -9,8 +9,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -22,13 +20,11 @@ import com.example.ninjamission.data.Shuriken;
 import com.example.ninjamission.miscellenous.TickListener;
 import com.example.ninjamission.miscellenous.UpdateTimer;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
-import java.util.Scanner;
 
 public class NinjaView extends View implements TickListener {
     int w;
@@ -41,7 +37,7 @@ public class NinjaView extends View implements TickListener {
     private Paint timerPaint;
     private ArrayList<Ghost> ghosts;
     private ArrayList<String> operators;
-    private int inCount, onScreenTime,timeCount, wrongShoot;
+    private int inCount, onScreenTime,timeCount, wrongShoot, inLimit, wrongLimit, rapidLimit;
     static int level = 1;
     private int a,b, score = 0;
     private boolean ansExist = false;
@@ -110,9 +106,8 @@ public class NinjaView extends View implements TickListener {
 
         //TO DO
         /*
-        1. Ghost Speed- easy, medium, hard
-        2. Next level- saved level- Options
-        3. Sound effects
+        2. Score + level log
+        3. Sound effects - Options
         4. Background music
         5. Get Score - The faster the higher- DONE!
         6. Maybe losing if hitting the wrong answer level -1 times
@@ -130,7 +125,7 @@ public class NinjaView extends View implements TickListener {
     @Override
     public void onDraw(Canvas c){
         if (!initialized) {
-           playAgain();
+           playAgain(true);
 
             //OnScreenTimer Paint
             timerPaint = new Paint();
@@ -150,18 +145,18 @@ public class NinjaView extends View implements TickListener {
         var minute = onScreenTime / 60;
         var seconds = Math.floorMod(onScreenTime, 60);
         timerPaint.setColor(Color.GREEN);
-        c.drawText(/*getResources().getString(R.string.time)+*/"Time: " + minute + ":" + String.format("%02d", seconds), w * 0.05f, h * 0.1f, timerPaint);
+        c.drawText(getResources().getString(R.string.time)+": " + minute + ":" + String.format("%02d", seconds), w * 0.05f, h * 0.1f, timerPaint);
         timerPaint.setColor(Color.RED);
-        c.drawText("Passed: " + inCount , w * 0.05f, h * 0.17f, timerPaint);
+        c.drawText(getResources().getString(R.string.Passed)+": " + inCount , w * 0.05f, h * 0.17f, timerPaint);
         //Math
         timerPaint.setColor(Color.BLUE);
-        c.drawText(/*getResources().getString(R.string.time)+*/"Problem: " + a + operator + b + " = ?", w * 0.4f, h * 0.1f, timerPaint);
+        c.drawText(getResources().getString(R.string.Problem)+": " + a + operator + b + " = ?", w * 0.4f, h * 0.1f, timerPaint);
 
         //Score
         timerPaint.setColor(Color.YELLOW);
-        c.drawText("SCORE: " +score, w * 0.8f, h * 0.1f, timerPaint);
+        c.drawText(getResources().getString(R.string.score)+": " +score, w * 0.8f, h * 0.1f, timerPaint);
         timerPaint.setColor(Color.RED);
-        c.drawText("Wrong: " +wrongShoot, w * 0.8f, h * 0.17f, timerPaint);
+        c.drawText(getResources().getString(R.string.Wrong)+": " +wrongShoot, w * 0.8f, h * 0.17f, timerPaint);
 
         ninjaSprite.draw(c);
         shurikens.forEach(s -> s.draw(c));
@@ -180,7 +175,7 @@ public class NinjaView extends View implements TickListener {
         if (x >= 0.175*w) {
             if (e.getAction() == MotionEvent.ACTION_DOWN) {
                 //index++;
-                if (shurikens.isEmpty()) {
+                if (shurikens.size() < rapidLimit) {
 
                     var shuriken = new Shuriken(getResources(), w, h, x, y);
                     //shuriken.setPosition(0.1f * w, h * 0.8f);
@@ -276,11 +271,12 @@ public class NinjaView extends View implements TickListener {
      * Check if game is ended
      */
     private void endGame(){
-        if (inCount>=5 || wrongShoot>= 5){
+        if (inCount>=inLimit || wrongShoot>= wrongLimit){
             AlertDialog.Builder ab = new AlertDialog.Builder(getContext());
             ab.setCancelable(false)
-                    .setTitle("YOU LOST :(!")
-                    .setPositiveButton("Continue",(d,i)-> playAgain())
+                    .setTitle("YOU'VE LOST")
+                    .setMessage(getResources().getString(R.string.endGameMsg)+score)
+                    .setPositiveButton("Continue",(d,i)-> playAgain(true))
                     .setNegativeButton("Stop",(d,i)->((Activity)getContext()).finish());
             tim.removeMessages(0);
             var ad = ab.create();
@@ -288,9 +284,13 @@ public class NinjaView extends View implements TickListener {
         }
     }
 
-    private void playAgain(){
+    private void playAgain(boolean reset){
+
         score = 0;
         onScreenTime = SettingsActivity.SettingsFragment.getGameDuration(getContext());
+        inLimit = SettingsActivity.SettingsFragment.inCountLimit(getContext());
+        wrongLimit = SettingsActivity.SettingsFragment.wrongCountLimit(getContext());
+        rapidLimit = SettingsActivity.SettingsFragment.rapidLimit(getContext());
 
         shurikens = new ArrayList<>();
         ghosts = new ArrayList<>();
@@ -303,7 +303,8 @@ public class NinjaView extends View implements TickListener {
         ninjaSprite = new NinjaSprite(getResources(),w,h);
         ninjaSprite.setPosition(w*0.05f, h*0.7f);
         background = Background.getSingleton(getResources(),w,h);/*new Background(getResources(),w,h);*/
-
+        //reset only lose or first start
+        if (reset) background.reset();
         tim = new UpdateTimer();
 
         tim.register(ninjaSprite);
@@ -326,12 +327,12 @@ public class NinjaView extends View implements TickListener {
         AlertDialog.Builder ab = new AlertDialog.Builder(getContext());
         ab.setCancelable(false)
                 .setTitle("Going to level " + (level))
-                .setPositiveButton("Continue",(d,i)-> playAgain())
+                .setPositiveButton("Next Level",(d,i)-> playAgain(false))
                 .setNegativeButton("Stay", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         level--;
-                        playAgain();
+                        playAgain(false);
                     }
                 }).setCancelable(false);
                 //.setNegativeButton("Stop",(d,i)->((Activity)getContext()).finish());
@@ -390,17 +391,17 @@ public class NinjaView extends View implements TickListener {
     }
 
     public void releaseFXs() {
-        if (right_answer_fx!=null)
-        right_answer_fx.release();
+        if (right_answer_fx!=null) {
+            right_answer_fx.release();
+        }
+
     }
 
     public void resumeTimer() {
-        if (tim!=null)
-        tim.resume();
+        if (tim!=null) tim.resume();
     }
 
     public void pauseTimer() {
-        if (tim!=null)
-        tim.pause();
+        if (tim!=null) tim.pause();
     }
 }

@@ -4,13 +4,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.os.Handler;
-import android.os.Message;
-
-import androidx.annotation.NonNull;
 
 import com.example.ninjamission.R;
-import com.example.ninjamission.miscellenous.TickListener;
 
 public class Shuriken extends Sprite{
     private int index = 0;

@@ -17,39 +17,40 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
-    <string name="dark_mode">Enable Dark Mode </string>
-    <string name="count_down">Set game time</string>
+    <string name="SetGameDuration">Set Game Duration</string>
     <string name="game_sound">Enable Game SFX </string>
     <string name="background_music">Enable Background Music </string>
     <string name="toast_text">Let the battle begin!</string>
-    <string name="frugality">Enable Frugality </string>
-    <string name="vibrant_mode">Enable Vibrant Mode </string>
-    <string name="battleship_move">Allow Battleship moving </string>
-    <string name="sub_horizontal">Allow Submarines to move horizontally </string>
-    <string name="air_horizontal">Allow Planes to move horizontally" </string>
-    <string name="rapid_missile">Rapid fire on Missiles </string>
-    <string name="rapid_depthc">Rapid fire on DepthCharges </string>
-    <string name="num_airs">Set number of airplanes </string>
-    <string name="num_subs">Set number of submarines </string>
-    <string name="air_speed">Set airplanes speed </string>
+    <string name="ShootLimits">Shoot Limit </string>
+    <string name="WrongLimit">Wrong Limit</string>
+    <string name="InLimit">In Limit</string>
+    <string name="MathLevel">Math Level</string>
+    <string name="SelectLevel">Select Level</string>
+    <string name="GhostSpeed">Set Ghost speed </string>
     <string name="sub_speed">Set submariens speed </string>
-    <string name="air_dir">Set airplanes direction</string>
-    <string name="sub_dir">Set submarines direction </string>
+    <string name="Problem">Problem</string>
     <string name="ON">ON</string>
     <string name="OFF">OFF</string>
     <string name="time">Time</string>
     <string name="score">Score</string>
+    <string name="Passed">Passed</string>
+    <string name="Wrong">Wrong</string>
     <string name="gameover">GAME OVER!</string>
     <string name="playAgain">Play Again!</string>
     <string name="Okay">Okay</string>
     <string name="quit">Quit.</string>
+    <string name="endGameMsg">Great work! You obtained:</string>
     <string name="endGameMsg1">What a good looking and smart one!\nCongratulations! A new high score! :</string>
     <string name="endGameMsg2">You have done well! but there\'s always way to improve :) \nScore obtained: </string>
     <string name="Info">Instructions</string>
+    <string name="RestartLevel">Restart Level</string>
+    <string name="Yes">Yes</string>
+    <string name= "No">No</string>
+    <string name="RestartInfo">By clicking restart, level will be back to 1</string>
     <string name="infoTexts">-Click anywhere to shoot shurikens\n
         - Winning Condition:\n
         * Hit the right Ghost that has the answer for the math problem\n
-        * If 5 Ghosts go to the otherside, the game will end and you will lose\n
+        * Default: If 5 ghosts with correct answer pass the Ninja, the game will end and you will lose, the same for when you shoot the wrong answer ghosts\n
         Credit: \'Reggaeton Pop - Night Walk\' by AntipodeanWriter
 
 </string>

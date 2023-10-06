@@ -7,13 +7,21 @@ import android.content.Intent;
 import android.graphics.RectF;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 
 import com.example.ninjamission.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.io.IOException;
 
@@ -23,11 +31,28 @@ public class SplashScreen extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle b) {
         super.onCreate(b);
+
+        // Calculate the desired height as 90% of the screen height
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int screenHeight = displayMetrics.heightPixels;
+        int desiredHeight = (int) (screenHeight * .85);
+
+        // Create layout parameters for the views
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, // Width
+                LinearLayout.LayoutParams.WRAP_CONTENT    // Height
+        );
+
         bg = new ImageView(this);
         bg.setImageResource(R.drawable.welcome_screen);
 
         //Stretch
         bg.setScaleType(ImageView.ScaleType.FIT_XY);
+        bg.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                 desiredHeight// Set the height you want for the background view
+        ));
+
 
         //AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
        // audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 20, 0);
@@ -39,8 +64,28 @@ public class SplashScreen extends Activity {
             bgMusic.start();
         }
 
+        //Goole Ad
+        AdView adView = new AdView(this);
 
-        setContentView(bg);
+        adView.setAdSize(AdSize.BANNER);
+        adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); //replace AdUnitId
+        adView.setLayoutParams(layoutParams);
+
+// Add adView to your view hierarchy.
+        LinearLayout l = new LinearLayout(this);
+        l.addView(bg);
+        l.addView(adView);
+        l.setOrientation(LinearLayout.VERTICAL);
+        l.setGravity(Gravity.CENTER_HORIZONTAL);
+        setContentView(l);
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
     }
 
     @Override
@@ -67,7 +112,7 @@ public class SplashScreen extends Activity {
 
 
         if (e.getAction() == MotionEvent.ACTION_DOWN){
-            Log.d("XY", "onTouchEvent: x is "+ xP + " and Y is " + yP );
+            //Log.d("XY", "onTouchEvent: x is "+ xP + " and Y is " + yP );
             if (infoBox.contains(x,y)){
 
                 var ab = new AlertDialog.Builder(this);
@@ -79,14 +124,14 @@ public class SplashScreen extends Activity {
                 box.show();
             }
             if (startBox.contains(x,y)){
-                System.out.println("Clicked start box");
+
                 var intent = new Intent(this,MainActivity.class);
                 startActivity(intent);
                 finish();
             }
 
             if (settingBox.contains(x,y)){
-                System.out.println("Clicked start box");
+
                 var intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
 
@@ -95,15 +140,15 @@ public class SplashScreen extends Activity {
             if (restartBox.contains(x,y)){
                 var rb = new AlertDialog.Builder(this);
                 rb.setTitle("Restart Level")
-                        .setPositiveButton("Restart",(d , i) ->         {
+                        .setPositiveButton(getResources().getString(R.string.Yes),(d , i) ->         {
                             try(var fos = this.openFileOutput("level.txt",Context.MODE_PRIVATE)) {
                     fos.write(("1"+ " ").getBytes());
                 } catch (IOException ex){
                     ex.printStackTrace();
                 }
                         }
-)               .setNegativeButton("Cancel",null)
-                        .setMessage("By clicking restart, level will be back to 1");
+)               .setNegativeButton(getResources().getString(R.string.No),null)
+                        .setMessage(getResources().getString(R.string.RestartInfo));
                 AlertDialog restartB = rb.create();
                 restartB.show();
 

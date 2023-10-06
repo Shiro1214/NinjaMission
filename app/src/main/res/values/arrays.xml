@@ -20,11 +20,20 @@
         <item>100</item>
         <item>1000</item>
     </string-array>
-
+    <string-array name="rapidFire_entries">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 
     <string-array name="timer_entries">
         <item>3 min</item>
         <item>2 min</item>
         <item>1 min</item>
+    </string-array>
+    <string-array name="wrong_entries">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
     </string-array>
 </resources>

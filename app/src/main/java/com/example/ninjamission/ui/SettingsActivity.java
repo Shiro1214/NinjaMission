@@ -13,28 +13,19 @@ import androidx.preference.PreferenceScreen;
 import androidx.preference.SwitchPreference;
 
 import com.example.ninjamission.R;
+import com.google.android.gms.ads.AdView;
 
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class SettingsActivity extends AppCompatActivity {
-    private static final String SOUND_FX = "SOUND_FX";
     private static final String MATH_LEVEL = "MATH_LEVEL";
     private static final String DIFFICULTY_MODE = "DIFFICULTY_MODE";
-    private static final String RAPID_FIRE_DEPTHCHARGE = "RAPID_FIRE_DEPTHCHARGE";
-    private static final String SUB_MOVE_HORIZON = "PLANES_MOVE_HORIZON";
-    private static final String PLANES_MOVE_HORIZON = "PLANES_MOVE_HORIZON";
-    private static final String FRUGALITY_MODE = "FRUGALITY_MODE";
-    private static final String BATTLESHIP_MOVE = "BATTLESHIP_MOVE";
-    private static final String NUM_PLANES = "NUM_PLANES";
     private static final String LEVEL = "LEVEL";
-    private static final String AVERAGE_PLANE_SPEED = "AVERAGE_PLANE_SPEED";
-    private static final String AVERAGE_SUB_SPEED = "AVERAGE_SUB_SPEED";
-    private static final String PLANE_DIRECTION = "PLANE_DIRECTION";
-    private static final String SUB_DIRECTION = "SUB_DIRECTION";
-    private static final String DARK_MODE = "DARK_MODE";
-    private static final String VIBRANT_MODE = "VIBRANT_MODE";
     private static final String BACKGROUND_MUSIC = "BACKGROUND_MUSIC";
+    private static final String WRONG_COUNT = "WRONG_COUNT";
+    private static final String IN_COUNT = "IN_COUNT";
+    private static final String RAPID_FIRE = "RAPID_FIRE";
     private static final String GAME_DURATION = "GAME_DURATION";
     private static Context context;
     @Override
@@ -78,19 +69,37 @@ public class SettingsActivity extends AppCompatActivity {
             //TODO add preference widgets here
 
             String[] modeValues = {"0.02f","0.01f","0.005f"};
-            var difficulty = setUpListPrefs("Difficulty",getResources().getStringArray(R.array.mode_entries),modeValues,modeValues[1],DIFFICULTY_MODE);
+            var difficulty = setUpListPrefs(getExtStr(R.string.GhostSpeed),getResources().getStringArray(R.array.mode_entries),modeValues,modeValues[1],DIFFICULTY_MODE);
+
+            String[] fireValues = {"1","2","3"};
+            ListPreference rapidFire = setUpListPrefs(getExtStr(R.string.ShootLimits),getResources().getStringArray(R.array.rapidFire_entries),fireValues,fireValues[0],RAPID_FIRE);
 
             String[] mathValues = {"10","100","1000"};
             var mathLevel = new ListPreference(context);
-            mathLevel.setTitle("Math Level");
+            mathLevel.setTitle(getExtStr(R.string.MathLevel));
             mathLevel.setEntries(R.array.math_entries);
             mathLevel.setEntryValues(mathValues);
             mathLevel.setDefaultValue("10");
             mathLevel.setKey(MATH_LEVEL);
 
+            String[] failValues = {"5","10","15"};
+            var wrongCounts = new ListPreference(context);
+            wrongCounts.setTitle(getExtStr(R.string.WrongLimit));
+            wrongCounts.setEntries(R.array.wrong_entries);
+            wrongCounts.setEntryValues(failValues);
+            wrongCounts.setDefaultValue("5");
+            wrongCounts.setKey(WRONG_COUNT);
+
+            var inCounts = new ListPreference(context);
+            inCounts.setTitle(getExtStr(R.string.InLimit));
+            inCounts.setEntries(R.array.wrong_entries);
+            inCounts.setEntryValues(failValues);
+            inCounts.setDefaultValue("5");
+            inCounts.setKey(IN_COUNT);
+
             String[] timerValues = {"180","120","60"};
             var timer = new ListPreference(context);
-            timer.setTitle("Set Game Duration");
+            timer.setTitle(getExtStr(R.string.SetGameDuration));
             timer.setEntryValues(timerValues);
             timer.setEntries(timerValues);
             timer.setDefaultValue("180");
@@ -102,16 +111,19 @@ public class SettingsActivity extends AppCompatActivity {
                 levels[i-1] = i+"";
             }
             var levelPrefs = new ListPreference(context);
-            levelPrefs.setTitle("Select level");
+            levelPrefs.setTitle(getExtStr(R.string.SelectLevel));
             levelPrefs.setEntryValues(levels);
             levelPrefs.setEntries(levels);
             levelPrefs.setDefaultValue(""+level);
             levelPrefs.setKey(LEVEL);
 
-            CheckBoxPreference bgMusic = setUpBoxPrefs("Background Music",BACKGROUND_MUSIC);
+            CheckBoxPreference bgMusic = setUpBoxPrefs(getExtStr(R.string.background_music),BACKGROUND_MUSIC);
 
             setPreferenceScreen(screen);
             screen.addPreference(difficulty);
+            screen.addPreference(rapidFire);
+            screen.addPreference(inCounts);
+            screen.addPreference(wrongCounts);
             screen.addPreference(mathLevel);
             screen.addPreference(levelPrefs);
             screen.addPreference(bgMusic);
@@ -128,7 +140,18 @@ public class SettingsActivity extends AppCompatActivity {
             var tmp = PreferenceManager.getDefaultSharedPreferences(c).getString(LEVEL,""+level);
             return Integer.parseInt(tmp);
         }
-
+        public static int  wrongCountLimit(Context c){
+            var tmp = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(c).getString(WRONG_COUNT,"5"));
+            return tmp;
+        }
+        public static int  inCountLimit(Context c){
+            var tmp = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(c).getString(IN_COUNT,"5"));
+            return tmp;
+        }
+        public static int  rapidLimit(Context c){
+            var tmp = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(c).getString(RAPID_FIRE,"1"));
+            return tmp;
+        }
         public static int  mathLevel(Context c){
             var tmp = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(c).getString(MATH_LEVEL,"10"));
             return tmp;
@@ -175,10 +198,6 @@ public class SettingsActivity extends AppCompatActivity {
             return a;
         }
 
-
-        public static String  numPlanesSet(Context c){
-            return PreferenceManager.getDefaultSharedPreferences(c).getString(NUM_PLANES,"3");
-        }
 
     }
 }
